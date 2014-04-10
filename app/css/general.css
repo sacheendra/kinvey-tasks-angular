@@ -1,0 +1,122 @@
+*{
+    font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+input {
+    display: inline-block;
+    vertical-align: middle;
+    width: 223px;
+    height: 36px;
+    font-size: 16px;
+    padding: 5px 8px;
+    border: 1px solid #CCCCCC;
+}
+
+::-webkit-input-placeholder { /* WebKit browsers */
+    color:    #CCCCCC;
+}
+:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+    color:    #CCCCCC;
+}
+::-moz-placeholder { /* Mozilla Firefox 19+ */
+    color:    #CCCCCC;
+}
+:-ms-input-placeholder { /* Internet Explorer 10+ */
+    color:    #CCCCCC;
+}
+
+input:focus {
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+    border: 1px solid #5a5c60;
+    -webkit-box-shadow: 0 1px 1px 1px rgba(20, 20, 20, .2);
+    -moz-box-shadow: 0 1px 1px 1px rgba(20, 20, 20, .2);
+    box-shadow: 0 1px 1px 1px rgba(20, 20, 20, .2);
+    outline: 0
+}
+
+button {
+    color:#180E00;
+    font-size: 16px;
+    height: 34px;
+    padding-left: 12px;
+    padding-right: 12px;
+    background: linear-gradient(to top, #BB7200, #E38F11);
+    border: 1px solid #BE7400;
+    border-radius: 5%;
+}
+
+button:hover{
+    background: linear-gradient(to top, #CE7D00, #BB7200);
+}
+
+button:active {
+    background: #BB7200;
+    border: 1px solid #BE7400;
+}
+
+button[type=submit] {
+    color: #FFFFFF;
+    background: linear-gradient(to top, #13633A, #1B8F54);
+    border: 1px solid #13633A;
+}
+
+button[type=submit]:hover{
+    background: linear-gradient(to top, #187E4A, #156F41);
+    border: 1px solid #13633A;
+}
+
+button[type=submit]:active{
+    background: #156F41;
+}
+
+label{
+    margin-bottom: 5px;
+    color: #5a5c60;
+}
+
+a {
+    color: #318CE8;
+    text-decoration: none;
+    font-size: 12px;
+    margin-top: -100px;
+    cursor: pointer;
+}
+
+a:hover {
+    color: #1259A1;
+    text-decoration : underline;
+}
+
+span{
+    color: #b94a48;
+    font-size: 12px;
+    height: 20px;
+    display: block;
+}
+
+span.error{
+    margin-top: 5px;
+}
+
+p {
+    display: block;
+    font-size: 16px;
+    line-height: 24px;
+    color: #5a5c60;
+    text-align: left;
+}
+
+.error-style{
+    color: #b94a48;
+}
+
+.main-div {
+    width: 400px;
+    margin: 100px auto;
+}
+.center-align-div{
+    text-align: center
+}
+
