@@ -14,7 +14,7 @@ angular.module('tasks-trello', [
     config(['$routeProvider', function($routeProvider) {
         $routeProvider.when('/login', {templateUrl: 'partials/login.html', controller: 'LoginController'});
         $routeProvider.when('/home', {templateUrl: 'partials/home.html', controller: 'HomeController'});
-        $routeProvider.when('/orgs/:id', {templateUrl: 'partials/org.html', controller: 'OrgController'});
+        $routeProvider.when('/orgs/:id', {templateUrl: 'partials/org.html', controller: 'OrgsController'});
         $routeProvider.when('/boards/:id', {templateUrl: 'partials/board.html', controller: 'BoardsController'});
         $routeProvider.otherwise({redirectTo: '/home'});
     }]).
@@ -26,6 +26,7 @@ angular.module('tasks-trello', [
             appKey : 'kid_TP-o2paIWO',
             appSecret : '6df2f442765741aa833f922ff548ec8b'
         });
+        $rootScope =
         promise.then(function() {
             // Kinvey initialization finished with success
             console.log("Kinvey init with success");
@@ -39,17 +40,19 @@ angular.module('tasks-trello', [
 
 //function selects the desired behavior depending on whether the user is logged or not
 function determineBehavior($kinvey, $location, $rootScope) {
-    var activeUser = $kinvey.getActiveUser();
-    console.log("$location.$$url: " + $location.$$url);
-    if (activeUser !== null) {
-        console.log("activeUser not null determine behavior");
-        if ($location.$$url !== '/home') {
-            $location.path('/home');
+    var promise = $kinvey.User.me();
+    promise.then(function(response) {
+        console.log("$location.$$url: " + $location.$$url);
+        if (response !== null) {
+            console.log("activeUser not null determine behavior");
+            if ($location.$$url !== '/home') {
+                $location.path('/home');
+            }
+        } else {
+            console.log("activeUser null redirecting");
+            if ($location.$$url !== '/login') {
+                $location.path('/login');
+            }
         }
-    } else {
-        console.log("activeUser null redirecting");
-        if ($location.$$url !== '/login') {
-            $location.path('/login');
-        }
-    }
+    });
 }

@@ -1,1 +1,22 @@
-<p>This is the partial for view 1.</p>
+<div class="center-align-div">
+    <div class="block-div" ng-controller="HomeController">
+        <form name="orgCreateForm" novalidate>
+            <h4>Create Organization</h4>
+
+            <div class="block-input-label">
+                <label id="login-email-label" for="org-name">Org Name:</label>
+                <input id="org-name" name="organization" ng-model="organization" required/>
+                <button ng-click="addOrg()">Add org</button>
+            </div>
+        </form>
+        <hr>
+        <div>
+            <h4>Your Organizations</h4>
+
+            <ul ng-repeat="org in orgs">
+                <a ng-click="gotoOrg($index)">{{org.name}}</a>
+                <button ng-click="deleteOrg($index)">Delete org</button>
+            </ul>
+        </div>
+    </div>
+</div>

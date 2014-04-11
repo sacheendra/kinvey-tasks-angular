@@ -1,9 +1,22 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title></title>
-</head>
-<body>
+<div class="center-align-div">
+    <div class="block-div" ng-controller="OrgsController">
+        <form name="boardCreateForm" novalidate>
+            <h4>Create Board</h4>
 
-</body>
-</html>
+            <div class="block-input-label">
+                <label id="login-email-label" for="board-name">Board Name:</label>
+                <input id="board-name" name="board" ng-model="board" required/>
+                <button ng-click="addBoard()">Add board</button>
+            </div>
+        </form>
+        <hr>
+        <div>
+            <h4>Your Boards</h4>
+
+            <ul ng-repeat="board in boards">
+                <a ng-click="">{{board.name}}</a>
+                <button ng-click="deleteBoard($index)">Delete board</button>
+            </ul>
+        </div>
+    </div>
+</div>
