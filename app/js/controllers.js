@@ -188,7 +188,6 @@ angular.module('tasks-trello.controllers', []).
         $scope.org = null
 
         $scope.addBoard = function() {
-            console.log($scope.boardCreateForm);
             if($scope.boardCreateForm.board.$error.required)
                 return;
 
@@ -268,11 +267,13 @@ angular.module('tasks-trello.controllers', []).
             });
             prom.then(function(response) {
                 $scope.org = response;
+                $scope.getBoards();
+                $scope.getUsers();
             });
         }
 
         $scope.getUsers = function() {
-            var prom = $kinvey.DataStore.find('users');
+            var prom = $kinvey.User.find();
             prom.then(function(response) {
                 for(var i=0;i<response.length;i++) {
                     $scope.users.push(response[i]);
@@ -281,6 +282,9 @@ angular.module('tasks-trello.controllers', []).
         }
 
         $scope.addMember = function(index) {
+            if($scope.isMember(index))
+                return;
+            delete $scope.users[index].$$hashKey;
             $scope.org.members.push($scope.users[index]);
             var promise = $kinvey.DataStore.save('organizations', $scope.org, {
                 excludes: ['owner', 'admins', 'members'],
@@ -288,13 +292,16 @@ angular.module('tasks-trello.controllers', []).
             });
             promise.then(function(response) {
                 $scope.org = response;
+            }, function(res) {
+                console.log(res);
             });
         }
 
         $scope.removeMember = function(index) {
+            $scope.removeAdmin(index);
             for(var j=0;j<$scope.org.members.length;j++) {
                 if($scope.org.members[j]._id === $scope.users[index]._id) {
-                    $scope.org.members.slice(j, 1);
+                    $scope.org.members.splice(j, 1);
                     break;
                 }
             }
@@ -304,10 +311,14 @@ angular.module('tasks-trello.controllers', []).
             });
             promise.then(function(response) {
                 $scope.org = response;
+            }, function(res) {
+                console.log(res);
             });
         }
 
         $scope.addAdmin = function(index) {
+            $scope.addMember(index);
+            delete $scope.users[index].$$hashKey;
             $scope.org.admins.push($scope.users[index]);
             var promise = $kinvey.DataStore.save('organizations', $scope.org, {
                 excludes: ['owner', 'admins', 'members'],
@@ -321,7 +332,7 @@ angular.module('tasks-trello.controllers', []).
         $scope.removeAdmin = function(index) {
             for(var j=0;j<$scope.org.admins.length;j++) {
                 if($scope.org.admins[j]._id === $scope.users[index]._id) {
-                    $scope.org.admins.slice(j, 1);
+                    $scope.org.admins.splice(j, 1);
                     break;
                 }
             }
@@ -335,7 +346,7 @@ angular.module('tasks-trello.controllers', []).
         }
 
         $scope.isMember = function(index) {
-            for(var i=0;i<$scope.org.members;i++) {
+            for(var i=0;i<$scope.org.members.length;i++) {
                 if($scope.org.members[i]._id === $scope.users[index]._id)
                     return true;
             }
@@ -346,7 +357,7 @@ angular.module('tasks-trello.controllers', []).
         $scope.isAdmin = function(index) {
             if($scope.org.owner._id === $scope.users[index]._id)
                 return true;
-            for(var i=0;i<$scope.org.admins;i++) {
+            for(var i=0;i<$scope.org.admins.length;i++) {
                 if($scope.org.admins[i]._id === $scope.users[index]._id)
                     return true;
             }
@@ -354,7 +365,13 @@ angular.module('tasks-trello.controllers', []).
             return false;
         }
 
+        $scope.notOwner = function(index) {
+            if($scope.org.owner._id === $scope.users[index]._id)
+                return false;
+            return true;
+        }
+
         $scope.getOrg();
-        $scope.getUsers();
-        $scope.getBoards();
+        //$scope.getUsers();
+        //$scope.getBoards();
     }]);

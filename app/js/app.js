@@ -19,27 +19,27 @@ angular.module('tasks-trello', [
         $routeProvider.otherwise({redirectTo: '/home'});
     }]).
 
-    run(['$location', '$kinvey', '$rootScope', function($location, $kinvey, $rootScope) {
+    run(['$location', '$kinvey', function($location, $kinvey) {
 
         // Kinvey initialization starts
         var promise = $kinvey.init({
-            appKey : 'kid_TP-o2paIWO',
-            appSecret : '6df2f442765741aa833f922ff548ec8b'
+            appKey : 'kid_eVQkjJSxtq',
+            appSecret : 'cb383640e85b4d37ac5fbf4c81466677'
         });
         promise.then(function() {
             //angular.bootstrap(document, ['tasks-trello']);
             // Kinvey initialization finished with success
             console.log("Kinvey init with success");
-            determineBehavior($kinvey, $location, $rootScope);
+            determineBehavior($kinvey, $location);
         }, function(errorCallback) {
             // Kinvey initialization finished with error
             console.log("Kinvey init with error: " + JSON.stringify(errorCallback));
-            determineBehavior($kinvey, $location, $rootScope);
+            determineBehavior($kinvey, $location);
         });
     }]);
 
 //function selects the desired behavior depending on whether the user is logged or not
-function determineBehavior($kinvey, $location, $rootScope) {
+function determineBehavior($kinvey, $location) {
     var promise = $kinvey.User.me();
     promise.then(function(response) {
         console.log("$location.$$url: " + $location.$$url);
@@ -53,6 +53,11 @@ function determineBehavior($kinvey, $location, $rootScope) {
             if ($location.$$url !== '/login') {
                 $location.path('/login');
             }
+        }
+    }, function(res) {
+        console.log("activeUser null redirecting");
+        if ($location.$$url !== '/login') {
+            $location.path('/login');
         }
     });
 }

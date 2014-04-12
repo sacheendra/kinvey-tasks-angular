@@ -19,15 +19,15 @@
             </ul>
         </div>
         <hr>
+        <h4>Members</h4>
         <div style="overflow-y: auto; max-height: 200px">
-            <div ng-repeat="user in users">
+            <ul ng-repeat="user in users">
                 {{user.username}}
-                <button ng-click="addMember($index)" ng-hide="isUser($index)">Add Member</button>
-                <button ng-click="removeMember($index)" ng-show="isUser($index)">Remove Member</button>
+                <button ng-click="addMember($index)" ng-hide="isMember($index)">Add Member</button>
+                <button ng-click="removeMember($index)" ng-show="isMember($index) && notOwner($index)">Remove Member</button>
                 <button ng-click="addAdmin($index)" ng-hide="isAdmin($index)">Add Admin</button>
-                <button ng-click="removeAdmin($index)" ng-show="isAdmin($index)">Remove Admin</button>
-            </div>
+                <button ng-click="removeAdmin($index)" ng-show="isAdmin($index) && notOwner($index)">Remove Admin</button>
+            </ul>
         </div>
-        <hr>
     </div>
 </div>
