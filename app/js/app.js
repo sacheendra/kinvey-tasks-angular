@@ -26,8 +26,8 @@ angular.module('tasks-trello', [
             appKey : 'kid_TP-o2paIWO',
             appSecret : '6df2f442765741aa833f922ff548ec8b'
         });
-        $rootScope =
         promise.then(function() {
+            //angular.bootstrap(document, ['tasks-trello']);
             // Kinvey initialization finished with success
             console.log("Kinvey init with success");
             determineBehavior($kinvey, $location, $rootScope);

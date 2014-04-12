@@ -168,7 +168,7 @@ angular.module('tasks-trello.controllers', []).
                     relations : { members: 'users' }
                 });
                 promise.then(function(orgs) {
-                    for(var i;i<orgs.length;i++){
+                    for(var i=0;i<orgs.length;i++){
                         $scope.orgs.push(orgs[i]);
                     }
                 });
@@ -233,7 +233,7 @@ angular.module('tasks-trello.controllers', []).
                 var admin = false;
                 if(resp.owner._id === user._id)
                     admin = true;
-                for(var i;i<resp.admins.length;i++) {
+                for(var i=0;i<resp.admins.length;i++) {
                     if(resp.admins[i]._id === user._id)
                         admin = true;
                 }
@@ -256,7 +256,7 @@ angular.module('tasks-trello.controllers', []).
                     relations : { owner: 'organizations' }
                 });
                 promise.then(function(boards) {
-                    for(var i;i<boards.length;i++){
+                    for(var i=0;i<boards.length;i++){
                         $scope.boards.push(boards[i]);
                     }
                 });
@@ -274,7 +274,7 @@ angular.module('tasks-trello.controllers', []).
         $scope.getUsers = function() {
             var prom = $kinvey.DataStore.find('users');
             prom.then(function(response) {
-                for(var i;i<response.length;i++) {
+                for(var i=0;i<response.length;i++) {
                     $scope.users.push(response[i]);
                 }
             });
@@ -292,7 +292,7 @@ angular.module('tasks-trello.controllers', []).
         }
 
         $scope.removeMember = function(index) {
-            for(var j;j<$scope.org.members.length;j++) {
+            for(var j=0;j<$scope.org.members.length;j++) {
                 if($scope.org.members[j]._id === $scope.users[index]._id) {
                     $scope.org.members.slice(j, 1);
                     break;
@@ -319,7 +319,7 @@ angular.module('tasks-trello.controllers', []).
         }
 
         $scope.removeAdmin = function(index) {
-            for(var j;j<$scope.org.admins.length;j++) {
+            for(var j=0;j<$scope.org.admins.length;j++) {
                 if($scope.org.admins[j]._id === $scope.users[index]._id) {
                     $scope.org.admins.slice(j, 1);
                     break;
@@ -335,7 +335,7 @@ angular.module('tasks-trello.controllers', []).
         }
 
         $scope.isMember = function(index) {
-            for(var i;i<$scope.org.members;i++) {
+            for(var i=0;i<$scope.org.members;i++) {
                 if($scope.org.members[i]._id === $scope.users[index]._id)
                     return true;
             }
@@ -346,7 +346,7 @@ angular.module('tasks-trello.controllers', []).
         $scope.isAdmin = function(index) {
             if($scope.org.owner._id === $scope.users[index]._id)
                 return true;
-            for(var i;i<$scope.org.admins;i++) {
+            for(var i=0;i<$scope.org.admins;i++) {
                 if($scope.org.admins[i]._id === $scope.users[index]._id)
                     return true;
             }
