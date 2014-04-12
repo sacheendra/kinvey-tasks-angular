@@ -18,5 +18,16 @@
                 <button ng-click="deleteBoard($index)">Delete board</button>
             </ul>
         </div>
+        <hr>
+        <div style="overflow-y: auto; max-height: 200px">
+            <div ng-repeat="user in users">
+                {{user.username}}
+                <button ng-click="addMember($index)" ng-hide="isUser($index)">Add Member</button>
+                <button ng-click="removeMember($index)" ng-show="isUser($index)">Remove Member</button>
+                <button ng-click="addAdmin($index)" ng-hide="isAdmin($index)">Add Admin</button>
+                <button ng-click="removeAdmin($index)" ng-show="isAdmin($index)">Remove Admin</button>
+            </div>
+        </div>
+        <hr>
     </div>
 </div>

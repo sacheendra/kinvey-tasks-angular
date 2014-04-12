@@ -168,7 +168,7 @@ angular.module('tasks-trello.controllers', []).
                     relations : { members: 'users' }
                 });
                 promise.then(function(orgs) {
-                    for(var i in orgs){
+                    for(var i;i<orgs.length;i++){
                         $scope.orgs.push(orgs[i]);
                     }
                 });
@@ -184,6 +184,8 @@ angular.module('tasks-trello.controllers', []).
 
     controller('OrgsController', ['$scope', '$kinvey', '$location', '$routeParams', function($scope, $kinvey, $location, $routeParams) {
         $scope.boards = []
+        $scope.users = []
+        $scope.org = null
 
         $scope.addBoard = function() {
             console.log($scope.boardCreateForm);
@@ -199,7 +201,7 @@ angular.module('tasks-trello.controllers', []).
                 var admin = false;
                 if(resp.owner._id === user._id)
                     admin = true;
-                for(var i in resp.admins) {
+                for(var i=0;i<resp.admins.length;i++) {
                     if(resp.admins[i]._id === user._id)
                         admin = true;
                 }
@@ -231,7 +233,7 @@ angular.module('tasks-trello.controllers', []).
                 var admin = false;
                 if(resp.owner._id === user._id)
                     admin = true;
-                for(var i in resp.admins) {
+                for(var i;i<resp.admins.length;i++) {
                     if(resp.admins[i]._id === user._id)
                         admin = true;
                 }
@@ -247,12 +249,6 @@ angular.module('tasks-trello.controllers', []).
 
         }
 
-        $scope.gotoOrg = function(index) {
-            var org = $scope.orgs[index];
-
-            $location.path("/orgs/"+org._id);
-        }
-
         $scope.getBoards = function() {
                 var query = new $kinvey.Query();
                 query.equalTo('owner._id', $routeParams.id);
@@ -260,11 +256,105 @@ angular.module('tasks-trello.controllers', []).
                     relations : { owner: 'organizations' }
                 });
                 promise.then(function(boards) {
-                    for(var i in boards){
+                    for(var i;i<boards.length;i++){
                         $scope.boards.push(boards[i]);
                     }
                 });
         }
 
+        $scope.getOrg = function() {
+            var prom = $kinvey.DataStore.get('organizations', $routeParams.id, {
+                relations: {owner:'users', admins: 'users', members: 'users'}
+            });
+            prom.then(function(response) {
+                $scope.org = response;
+            });
+        }
+
+        $scope.getUsers = function() {
+            var prom = $kinvey.DataStore.find('users');
+            prom.then(function(response) {
+                for(var i;i<response.length;i++) {
+                    $scope.users.push(response[i]);
+                }
+            });
+        }
+
+        $scope.addMember = function(index) {
+            $scope.org.members.push($scope.users[index]);
+            var promise = $kinvey.DataStore.save('organizations', $scope.org, {
+                excludes: ['owner', 'admins', 'members'],
+                relations: {owner: 'users', admins: 'users', members: 'users'}
+            });
+            promise.then(function(response) {
+                $scope.org = response;
+            });
+        }
+
+        $scope.removeMember = function(index) {
+            for(var j;j<$scope.org.members.length;j++) {
+                if($scope.org.members[j]._id === $scope.users[index]._id) {
+                    $scope.org.members.slice(j, 1);
+                    break;
+                }
+            }
+            var promise = $kinvey.DataStore.save('organizations', $scope.org, {
+                excludes: ['owner', 'admins', 'members'],
+                relations: {owner: 'users', admins: 'users', members: 'users'}
+            });
+            promise.then(function(response) {
+                $scope.org = response;
+            });
+        }
+
+        $scope.addAdmin = function(index) {
+            $scope.org.admins.push($scope.users[index]);
+            var promise = $kinvey.DataStore.save('organizations', $scope.org, {
+                excludes: ['owner', 'admins', 'members'],
+                relations: {owner: 'users', admins: 'users', members: 'users'}
+            });
+            promise.then(function(response) {
+                $scope.org = response;
+            });
+        }
+
+        $scope.removeAdmin = function(index) {
+            for(var j;j<$scope.org.admins.length;j++) {
+                if($scope.org.admins[j]._id === $scope.users[index]._id) {
+                    $scope.org.admins.slice(j, 1);
+                    break;
+                }
+            }
+            var promise = $kinvey.DataStore.save('organizations', $scope.org, {
+                excludes: ['owner', 'admins', 'members'],
+                relations: {owner: 'users', admins: 'users', members: 'users'}
+            });
+            promise.then(function(response) {
+                $scope.org = response;
+            });
+        }
+
+        $scope.isMember = function(index) {
+            for(var i;i<$scope.org.members;i++) {
+                if($scope.org.members[i]._id === $scope.users[index]._id)
+                    return true;
+            }
+
+            return false;
+        }
+
+        $scope.isAdmin = function(index) {
+            if($scope.org.owner._id === $scope.users[index]._id)
+                return true;
+            for(var i;i<$scope.org.admins;i++) {
+                if($scope.org.admins[i]._id === $scope.users[index]._id)
+                    return true;
+            }
+
+            return false;
+        }
+
+        $scope.getOrg();
+        $scope.getUsers();
         $scope.getBoards();
     }]);
