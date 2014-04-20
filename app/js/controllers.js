@@ -287,7 +287,7 @@ angular.module('tasks-trello.controllers', []).
             delete $scope.users[index].$$hashKey;
             $scope.org.members.push($scope.users[index]);
             var promise = $kinvey.DataStore.save('organizations', $scope.org, {
-                excludes: ['owner', 'admins', 'members'],
+                exclude: ['owner', 'admins', 'members'],
                 relations: {owner: 'users', admins: 'users', members: 'users'}
             });
             promise.then(function(response) {
@@ -306,7 +306,7 @@ angular.module('tasks-trello.controllers', []).
                 }
             }
             var promise = $kinvey.DataStore.save('organizations', $scope.org, {
-                excludes: ['owner', 'admins', 'members'],
+                exclude: ['owner', 'admins', 'members'],
                 relations: {owner: 'users', admins: 'users', members: 'users'}
             });
             promise.then(function(response) {
@@ -321,7 +321,7 @@ angular.module('tasks-trello.controllers', []).
             delete $scope.users[index].$$hashKey;
             $scope.org.admins.push($scope.users[index]);
             var promise = $kinvey.DataStore.save('organizations', $scope.org, {
-                excludes: ['owner', 'admins', 'members'],
+                exclude: ['owner', 'admins', 'members'],
                 relations: {owner: 'users', admins: 'users', members: 'users'}
             });
             promise.then(function(response) {
@@ -337,7 +337,7 @@ angular.module('tasks-trello.controllers', []).
                 }
             }
             var promise = $kinvey.DataStore.save('organizations', $scope.org, {
-                excludes: ['owner', 'admins', 'members'],
+                exclude: ['owner', 'admins', 'members'],
                 relations: {owner: 'users', admins: 'users', members: 'users'}
             });
             promise.then(function(response) {
